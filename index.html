@@ -6,30 +6,29 @@
     <title>Player</title>
 </head>
 <body>
-
-    <script>
-        let input = prompt("Enter a YouTube Video ID or full Link:");
-        if (input) {
-            let cleanInput = input.trim();
-            let videoId = "";
-            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
-            let match = cleanInput.match(regExp);
-
-            if (match && match[2] && match[2].length === 11) {
-                videoId = match[2];
-            } else if (cleanInput.length === 11) {
-                videoId = cleanInput;
-            }
-
-            if (videoId) {
-                let iframe = document.createElement("iframe");
-                iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}`;
-                iframe.setAttribute("frameborder", "0");
-                iframe.setAttribute("allowfullscreen", "true");
-                iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
-                document.body.appendChild(iframe);
-            }
+<script>
+    let input = prompt("Enter a YouTube Video ID or full Link:");
+    if (input) {
+        let cleanInput = input.trim();
+        let videoId = "";
+        let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+        let match = cleanInput.match(regExp);
+        if (match && match[2] && match[2].length === 11) {
+            videoId = match[2];
+        } else if (cleanInput.length === 11) {
+            videoId = cleanInput;
         }
-    </script>
+        if (videoId) {
+            let iframe = document.createElement("iframe");
+            iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}`;
+            iframe.width = "100%";
+            iframe.height = "700";
+            iframe.style.border = "none";
+            iframe.setAttribute("allowfullscreen", "true");
+            iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+            document.body.appendChild(iframe);
+        }
+    }
+</script>
 </body>
 </html>
