@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic YouTube Video</title>
+    <title>PLayer</title>
     <style>
-        /* Creates a responsive 16:9 video player aspect ratio box */
+        body {
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
         .video-wrapper {
             position: relative;
             padding-bottom: 56.25%; /* 16:9 Ratio */
-            padding-top: 25px;
             height: 0;
             max-width: 800px;
             margin: 20px auto;
@@ -22,59 +25,35 @@
             width: 100%;
             height: 100%;
         }
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
     </style>
 </head>
 <body>
 
-    <h2>Dynamic YouTube Embed Player</h2>
-    
-    <!-- The YouTube video wrapper -->
     <div class="video-wrapper" id="video-container"></div>
 
     <script>
-    // Prompt user for input
-    let input = prompt("Enter a YouTube Video ID or full Link:");
+        let input = prompt("Enter a YouTube Video ID or full Link:");
+        if (input) {
+            let cleanInput = input.trim();
+            let videoId = "";
+            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+            let match = cleanInput.match(regExp);
 
-    if (input) {
-        let cleanInput = input.trim();
-        let videoId = "";
+            if (match && match[2].length === 11) {
+                videoId = match[2];
+            } else if (cleanInput.length === 11) {
+                videoId = cleanInput;
+            }
 
-        // Comprehensive Regex to extract 11-character ID from all YouTube variations
-        // (Standard URLs, mobile youtu.be share links, and modern shorts)
-        let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
-        let match = cleanInput.match(regExp);
-
-        if (match && match[2].length === 11) {
-            videoId = match[2];
-        } else if (cleanInput.length === 11) {
-            // Fallback if the user just pasted a raw 11-character ID
-            videoId = cleanInput;
+            if (videoId) {
+                let iframe = document.createElement("iframe");
+                iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}`;
+                iframe.setAttribute("frameborder", "0");
+                iframe.setAttribute("allowfullscreen", "true");
+                iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+                document.getElementById("video-container").appendChild(iframe);
+            }
         }
-
-        // If a valid ID was found or fallback met
-        if (videoId) {
-            let iframe = document.createElement("iframe");
-            
-            // Generates the final URL with the hardcoded /embed/ pathway and template variable
-            iframe.src = `https://youtube-nocookie.com/embed/${videoId}`;
-            iframe.setAttribute("frameborder", "0");
-            iframe.setAttribute("allowfullscreen", "true");
-            iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
-
-            // Insert into DOM
-            document.getElementById("video-container").appendChild(iframe);
-        } else {
-            document.body.innerHTML += "<h3 style='color:red;'>Error: Could not parse a valid 11-character YouTube video ID.</h3>";
-        }
-    } else {
-        document.body.innerHTML += "<h3>No video info provided. Refresh the page to try again.</h3>";
-    }
     </script>
 </body>
 </html>
