@@ -62,7 +62,7 @@
             let iframe = document.createElement("iframe");
             
             // Generates the final URL with the hardcoded /embed/ pathway and template variable
-            iframe.src = `https://youtube-nocookie.com{videoId}`;
+            iframe.src = `https://youtube-nocookie.com/embed/${videoId}`;
             iframe.setAttribute("frameborder", "0");
             iframe.setAttribute("allowfullscreen", "true");
             iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
