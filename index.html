@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fullscreen YouTube Player</title>
+    <title>Player</title>
     <style>
         * {
             margin: 0;
@@ -46,7 +46,7 @@
 
             if (videoId) {
                 const player = document.getElementById('videoPlayer');
-                player.src = `https://youtube.com{videoId}?autoplay=1&rel=0`;
+                player.src = `https://www.youtube.com/embed/{videoId}`;
             } else {
                 alert("Invalid YouTube URL. Please try again.");
                 loadVideo();
