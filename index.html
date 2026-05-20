@@ -4,39 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic YouTube Video</title>
+    <style>
+        /* Creates a responsive 16:9 video player aspect ratio box */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Ratio */
+            padding-top: 25px;
+            height: 0;
+            max-width: 800px;
+            margin: 20px auto;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- The YouTube video will load inside this wrapper -->
-    <div id="video-container"></div>
+    <h2>Dynamic YouTube Embed Player</h2>
+    
+    <!-- The YouTube video wrapper -->
+    <div class="video-wrapper" id="video-container"></div>
 
     <script>
-        // Ask the user for a link or ID on reload
-        let input = prompt("Enter a YouTube Video ID or full Link:");
+    // Prompt user for input
+    let input = prompt("Enter a YouTube Video ID or full Link:");
 
-        if (input) {
-            let videoId = input.trim();
+    if (input) {
+        let cleanInput = input.trim();
+        let videoId = "";
 
-            // Extract ID if the user pasted a full URL
-            if (videoId.includes("youtube.com") || videoId.includes("youtu.be")) {
-                let urlParams = new URLSearchParams(new URL(videoId).search);
-                videoId = urlParams.get("v") || videoId.split("/").pop();
-            }
+        // Comprehensive Regex to extract 11-character ID from all YouTube variations
+        // (Standard URLs, mobile youtu.be share links, and modern shorts)
+        let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+        let match = cleanInput.match(regExp);
 
-            // Create and embed your specific iframe code
+        if (match && match[2].length === 11) {
+            videoId = match[2];
+        } else if (cleanInput.length === 11) {
+            // Fallback if the user just pasted a raw 11-character ID
+            videoId = cleanInput;
+        }
+
+        // If a valid ID was found or fallback met
+        if (videoId) {
             let iframe = document.createElement("iframe");
-            iframe.src = `https://youtube-nocookie.com/embed/{videoId}`;
-            iframe.width = "100%";
-            iframe.height = "100%";
+            
+            // Generates the final URL with the hardcoded /embed/ pathway and template variable
+            iframe.src = `https://youtube-nocookie.com{videoId}`;
             iframe.setAttribute("frameborder", "0");
             iframe.setAttribute("allowfullscreen", "true");
+            iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
 
-            // Insert into the page
+            // Insert into DOM
             document.getElementById("video-container").appendChild(iframe);
         } else {
-            document.body.innerHTML = "<h3>No video ID provided. Refresh to try again.</h3>";
+            document.body.innerHTML += "<h3 style='color:red;'>Error: Could not parse a valid 11-character YouTube video ID.</h3>";
         }
+    } else {
+        document.body.innerHTML += "<h3>No video info provided. Refresh the page to try again.</h3>";
+    }
     </script>
-
 </body>
 </html>
