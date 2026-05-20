@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen YouTube Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <iframe id="videoPlayer" allow="autoplay; fullscreen"></iframe>
+
+    <script>
+        function getYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        function loadVideo() {
+            const inputUrl = prompt("Please enter a YouTube video URL:");
+            
+            if (!inputUrl) {
+                document.body.innerHTML = "<h2 style='color:white; text-align:center; margin-top:20vh; font-family:sans-serif;'>No URL entered. Refresh to try again.</h2>";
+                return;
+            }
+
+            const videoId = getYouTubeId(inputUrl);
+
+            if (videoId) {
+                const player = document.getElementById('videoPlayer');
+                player.src = `https://youtube.com{videoId}?autoplay=1&rel=0`;
+            } else {
+                alert("Invalid YouTube URL. Please try again.");
+                loadVideo();
+            }
+        }
+
+        window.onload = loadVideo;
+    </script>
+</body>
+</html>
